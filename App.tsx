@@ -1,63 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { TouchableOpacity, StyleSheet, Text, View, Alert } from 'react-native';
-import FormInput from './components/form-input';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function App() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+import LoginScreen from './screens/auth';
+import TodoListScreen from './screens/todo/todo-list';
+import TodoDetailScreen from './screens/todo/todo-detail';
+import ProfileScreen from './screens/profile';
 
-  const handleSubmit = () => {
-    if (email === 'root' && password === 'root') {
-      Alert.alert('Form Submitted', 'Email and password have been submitted!');
-    }
-  };
+const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
+function TodoStack() {
   return (
-    <View style={styles.container}>
-      <FormInput
-        label="Email"
-        value={email}
-        placeholderTextColor="#aaa"
-        placeholder="youremail@example.com"
-        onChangeText={setEmail}
-      />
-
-      <FormInput
-        label="Password"
-        value={password}
-        placeholder="**********"
-        placeholderTextColor="#aaa"
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen name="TodoList" component={TodoListScreen} />
+      <Stack.Screen name="TodoDetail" component={TodoDetailScreen} />
+    </Stack.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-  },
+function MainTabNavigator() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Todo List" component={TodoStack} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+}
 
-  button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="Login">
+        <Drawer.Screen name="Login" component={LoginScreen} />
+        <Drawer.Screen name="Home" component={MainTabNavigator} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+}
