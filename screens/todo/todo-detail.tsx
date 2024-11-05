@@ -2,11 +2,14 @@ import React from 'react';
 import { View, Text } from 'react-native';
 
 export default function TodoDetailScreen({ route }) {
-  const { todoId } = route.params;
+  const { todo } = route.params;
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View>
       <Text>Todo Detail</Text>
-      <Text>Todo ID: {todoId}</Text>
+      <Text>Todo id: {todo.id}</Text>
+      <Text>Todo title: {todo.title}</Text>
+      <Text>Todo desc: {todo.decs}</Text>
     </View>
   );
 }
