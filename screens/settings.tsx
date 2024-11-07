@@ -5,10 +5,10 @@ interface Props {
   // Add your component props here
 }
 
-export default function Profile(props: Props) {
+export default function Settings(props: Props) {
   return (
     <View>
-      <Text>Profile</Text>
+      <Text>Settings</Text>
     </View>
   );
 }
