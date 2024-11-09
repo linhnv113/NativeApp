@@ -3,6 +3,7 @@ import React from 'react';
 import TodoList from './todo-list';
 import TodoDetail from './todo-detail';
 import { type Todo } from './todo.interface';
+import { TodoProvider } from '../../contexts/todo.context';
 
 export type TodoStackParams = {
   TodoList: undefined;
@@ -13,9 +14,11 @@ const Stack = createNativeStackNavigator<TodoStackParams>();
 
 export default function TodoStack() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="TodoList" component={TodoList} />
-      <Stack.Screen name="TodoDetail" component={TodoDetail} />
-    </Stack.Navigator>
+    <TodoProvider>
+      <Stack.Navigator>
+        <Stack.Screen name="TodoList" component={TodoList} />
+        <Stack.Screen name="TodoDetail" component={TodoDetail} />
+      </Stack.Navigator>
+    </TodoProvider>
   );
 }

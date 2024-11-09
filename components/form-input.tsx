@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 interface Props extends TextInputProps {
-  label: string;
+  label?: string;
 }
 
 export default function FormInput({ label, ...props }: Props) {

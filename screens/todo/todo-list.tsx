@@ -1,62 +1,54 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
 import { TodoStackParams } from '.';
+import FormInput from '../../components/form-input';
+import TodoItem from './components/todo-item';
+import { useTodoContext } from '../../contexts/todo.context';
 
 type Props = NativeStackScreenProps<TodoStackParams, 'TodoList'>;
 
 export default function TodoList({ navigation }: Props) {
-  const todoList = [
-    {
-      id: 1,
-      title: 'Todo 1',
-      desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, molestiae?',
-      isDone: true,
-    },
-    {
-      id: 2,
-      title: 'Todo 2',
-      desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, molestiae?',
-      isDone: false,
-    },
-    {
-      id: 3,
-      title: 'Todo 3',
-      desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, molestiae?',
-      isDone: false,
-    },
-  ];
+  const { todoList, handleAddTodo } = useTodoContext();
+  const [title, setTitle] = useState('');
+
+  const handleAdd = () => {
+    handleAddTodo(title);
+    setTitle('');
+  };
 
   return (
-    <FlatList
-      data={todoList}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
-        <View style={styles.todoItem}>
-          <Text style={styles.todoText}>{item.title}</Text>
-          <Button
-            title="View"
-            onPress={() => navigation.navigate('TodoDetail', { todo: item })}
-          />
-        </View>
-      )}
-    />
+    <>
+      <View style={styles.formContainer}>
+        <Text style={styles.formContainerTitle}>Add New Todo</Text>
+        <FormInput
+          value={title}
+          placeholder="Todo title"
+          onChangeText={setTitle}
+        />
+        <Button title="Add" onPress={handleAdd} />
+      </View>
+
+      <FlatList
+        data={todoList}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <TodoItem todo={item} navigation={navigation} />
+        )}
+      />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  todoItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  formContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 24,
   },
 
-  todoText: {
-    flex: 1,
-    marginRight: 10,
+  formContainerTitle: {
+    fontSize: 32,
+    fontWeight: 700,
+    textAlign: 'center',
   },
 });
